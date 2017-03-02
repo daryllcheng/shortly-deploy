@@ -21,24 +21,14 @@ var crypto = require('crypto');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var link = new Schema({
+var urls = new Schema({
   url: String,
   baseUrl: String,
   code: String,
   title: String,
-  visits: String, 
+  visits: Number, 
   createdAt: { type: Date, default: Date.now }
 });
 
-link.pre('save', function(next) {
-  console.log('this.url', this.url);
-  console.log('this', this);
-  var shasum = crypto.createHash('sha1');
-  console.log('shasum', shasum);
-  shasum.update(this[url]);
-  console.log('shasum', shasum);
-  // model.set('code', shasum.digest('hex').slice(0, 5));
-  console.log('this after', this);
-});
-
-module.exports = mongoose.model('link', link);
+let Link = mongoose.model('Link', urls);
+module.exports = Link;

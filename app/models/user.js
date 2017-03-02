@@ -25,13 +25,31 @@ var Promise = require('bluebird');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var user = new Schema({
-  username: String,
-  password: String
+var userSchema = new Schema({
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true }
 });
 
-module.exports = mongoose.model('user', user);
+userSchema.hashPassword = function (err, password) {
+  if (err) throw err;
+  var cipher = Promise.promisify(bcrypt.hash);
+  return cipher(password, null, null).bind(this)
+    .then(function (hash) {
+      this.password = hash;
+    });
+};
 
+userSchema.comparePassword = function (attemptedPassword, callback) {
+  bcrypt.compare(attemptedPassword, this.password, function (err, isMatch) {
+    callback(isMatch);
+  });
+};
+
+
+
+
+let User = mongoose.model('User', userSchema);
+module.exports = User;
 
 // UserSchema.pre('save', function(next) {
 //     console.log(this); // logs out empty object {}
