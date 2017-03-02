@@ -37,7 +37,7 @@ module.exports = function (grunt) {
 
     eslint: {
       target: [
-        // Add list of files to lint here
+        ['public/dist/<%= pkg.name %>.js']
       ]
     },
 
@@ -88,7 +88,7 @@ module.exports = function (grunt) {
     'mochaTest'
   ]);
 
-  grunt.registerTask('build', ['concat', 'uglify']);
+  grunt.registerTask('build', ['concat', 'uglify', 'eslint', 'test']);
 
   grunt.registerTask('upload', function (n) {
     if (grunt.option('prod')) {
@@ -99,8 +99,6 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('deploy', [
-    // add your deploy tasks here
+
   ]);
-
-
 };
